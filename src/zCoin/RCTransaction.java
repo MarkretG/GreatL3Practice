@@ -2,7 +2,6 @@ package zCoin;
 public class RCTransaction {
     private String transactionType;
     private double amount;
-
     public String getTransactionType() {
         return transactionType;
     }

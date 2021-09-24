@@ -1,9 +1,10 @@
 package zCoin;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 public class ZCoinManagementSystem {
     static Banking banking = new Banking();
-
+    private static Scanner scanner =new Scanner(System.in);
     public static void main(String[] args) {
         Banking banking = new Banking();
         Scanner scanner = new Scanner(System.in);
@@ -80,6 +81,7 @@ public class ZCoinManagementSystem {
                     while (end) {
                         System.out.println("1.Assign approval status");
                         System.out.println("2.Transaction details");
+                        System.out.println("3.Rc to zc conversion rate");
                         System.out.println("3.exit admin login");
                         int c = scanner.nextInt();
                         switch (c) {
@@ -104,8 +106,15 @@ public class ZCoinManagementSystem {
                             }
                             break;
                             case 2:
+                                Map<Long,List<RCTransaction>> rcTransaction=banking.getRcTransactionHistory();
+                                Map<Long,List<ZCTransaction>> zcTransaction=banking.getZcTransactionHistory();
                                 break;
                             case 3:
+                                System.out.println("enter conversion rate");
+                                double conversionRate=scanner.nextDouble();
+                                banking.setConversionRate(conversionRate);
+                                System.out.println("set conversion rate successfully");
+                            case 4:
                                 end = false;
                                 break;
                         }
@@ -117,6 +126,28 @@ public class ZCoinManagementSystem {
             }
         }
 
+    }
+    private static void zcTransaction(User user) {
+        boolean endZcTransaction = true;
+        while (endZcTransaction) {
+            System.out.println("1.Transfer money");
+            System.out.println("2.change zc to rc");
+            System.out.println("3.Exit zc Transaction");
+            int a = scanner.nextInt();
+            switch (a) {
+                case 1:
+                    System.out.println("enter transferAmount");
+                    double amount=scanner.nextDouble();
+                    System.out.println("enter receiver zid");
+                    long zId=scanner.nextLong();
+                    banking.updateTransferAmount(user,amount,zId);
+                case 2:
+                    banking.covertZcToRc(user);
+                case 3:
+                    endZcTransaction = false;
+                    break;
+            }
+        }
     }
 
     private static void UserManagementPanel(User user) {
@@ -135,6 +166,8 @@ public class ZCoinManagementSystem {
                     banking.getAccountDetails(user);
                     break;
                 case 2:
+                    Map<Long,List<RCTransaction>> rcTransaction=banking.getRcTransactionHistory();
+                    Map<Long,List<ZCTransaction>> zcTransaction=banking.getZcTransactionHistory();
                     break;
                 case 3:
                     System.out.println("1.Rc Transaction");
@@ -147,7 +180,8 @@ public class ZCoinManagementSystem {
                             while (endRcTransaction) {
                                 System.out.println("1.withdraw");
                                 System.out.println("2.deposit");
-                                System.out.println("3.Exit rc Transaction");
+                                System.out.println("3.change rc to zc");
+                                System.out.println("4.Exit rc Transaction");
                                 int a = scanner.nextInt();
                                 switch (a) {
                                     case 1: {
@@ -183,6 +217,10 @@ public class ZCoinManagementSystem {
                                     }
                                     break;
                                     case 3:
+                                        banking.covertRcToZc(user);
+                                        System.out.println(user);
+                                        break;
+                                    case 4:
                                         endRcTransaction = false;
                                         break;
                                 }
@@ -190,10 +228,16 @@ public class ZCoinManagementSystem {
 
                         }
                         break;
-                        case 2:
-                        case 4:
+                        case 2: zcTransaction(user);break;
 
                     }
+                    break;
+                case 4:
+                    System.out.println("enter new password");
+                    String password=scanner.nextLine();
+                    banking.changePassword(user,password);
+                    System.out.println("password change successfully");
+                    break;
 
             }
         }

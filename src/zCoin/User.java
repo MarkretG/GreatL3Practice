@@ -1,5 +1,4 @@
 package zCoin;
-
 public class User {
     private String name;
     private String Password;

@@ -1,4 +1,5 @@
 package zCoin;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +66,47 @@ public class Banking {
         }
         return false;
     }
+    public User covertRcToZc(User user)
+    {
+        double conversionRate=cache.getRcToZcConversionRate();
+        double zc=user.getRc()/conversionRate;
+        user.setRc(0.0);
+        user.setZc(zc);
+        return user;
+    }
+    public User covertZcToRc(User user)
+    {
+        double conversionRate=cache.getRcToZcConversionRate();
+        double rc=user.getZc()*conversionRate;
+        user.setRc(rc);
+        user.setZc(0.0);
+        return user;
+    }
+    public void changePassword(User user,String password)
+    {
+        user.setPassword(password);
+    }
+    public Map<Long,List<RCTransaction>> getRcTransactionHistory()
+    {
+        return cache.getRcTransactionMap();
+    }
+    public Map<Long,List<ZCTransaction>> getZcTransactionHistory()
+    {
+        return cache.getZcTransactionMap();
+    }
+    public void setConversionRate(double conversionRate)
+    {
+      cache.setConversionRate(conversionRate);
+    }
+    public void updateTransferAmount(User user,double amount,long receiverZId)
+    {
+        if(user.getZc()>amount)
+        {
+            user.setZc(user.getZc()-amount);
+        }
+        User receiver=cache.getAccountDetails().get(receiverZId);
+        receiver.setZc(user.getZc()+amount);
+    }
     public void updateWithDrawAmount(User user,double amount)
     {
        user.setRc(user.getRc()-amount);
@@ -75,7 +117,7 @@ public class Banking {
     }
     public void addRcTransaction(long z_id,RCTransaction transaction)
     {
-        cache.addRcTransactionList(z_id,transaction);
+        cache.addRcTransactionInMap(z_id,transaction);
     }
     private void RemoveUserFromAccountCreationList(User user)
     {
