@@ -70,9 +70,15 @@ public class RailwayReservationSystem {
                 bookingStatus.add("booking rejected"+""+passenger.getName());
             }
         }
-        cache.addConfirmedTicketsInMap(ticketId,confirmedTickets);
-        cache.addRacTickets(racTickets);
-        cache.addWaitingTickets(waitingTickets);
+        if(confirmedTickets.size()>0) {
+            cache.addConfirmedTicketsInMap(ticketId, confirmedTickets);
+        }
+        if(racTickets.size()>0) {
+            cache.addRacTickets(racTickets);
+        }
+        if(waitingTickets.size()>0) {
+            cache.addWaitingTickets(waitingTickets);
+        }
         if(count>0) {
             ticketId++;
         }
@@ -82,35 +88,47 @@ public class RailwayReservationSystem {
     {
         Map<Integer,Map<Integer,Passenger>> map=getConfirmedTicketsHistory();
         Map<Integer,Passenger> innerMap=map.get(ticketId);
-        if(innerMap!=null) {
-            innerMap.remove(seatNo);
-            if(racTicketsCount>0)
-            {
-                Map<Integer,List<Passenger>> rac=getRacTicketsHistory();
-            }
-            if(waitingTicketsCount>0)
-            {
-                Map<Integer,List<Passenger>> wait=getWaitingTicketsHistory();
-            }
-        }
-        else {
+        if (innerMap==null)
+        {
             return "ticket id not available cancellation failed";
         }
-
+        for (Map.Entry<Integer,Passenger> entry: innerMap.entrySet()) {
+            if(entry.getKey()==seatNo) {
+                String berthPreference=entry.getValue().getBerthPreference();
+                innerMap.remove(seatNo);
+                cache.updateConfirmedTicketMap(ticketId, innerMap);
+                if (racTicketsCount > 0) {
+                    List<Passenger> rac = getRacTicketsHistory();
+                    Passenger passenger=rac.get(0);
+                    passenger.setBerthPreference(berthPreference);
+                    passenger.setConfirmationStatus("confirmed");
+                    cache.addConfirmedTicketsFromRac(passenger);
+                    cache.removePassengerFromRacList();
+                }
+                if (waitingTicketsCount > 0) {
+                    List<Passenger> wait = getWaitingTicketsHistory();
+                    Passenger passenger=wait.get(0);
+                    passenger.setConfirmationStatus("Rac");
+                    cache.addRacTicketsFromWaiting(passenger);
+                    cache.removePassengerFromWaitingList();
+                }
+            }
+        }
         confirmedTicketsCount++;
+        return "Ticket cancel successfully"+"ticket id"+ticketId+"seat no:"+seatNo;
     }
     public Map<Integer,Map<Integer,Passenger>> getConfirmedTicketsHistory()
     {
         return cache.getConfirmedTicketsMap();
     }
 
-    public Map<Integer,List<Passenger>> getRacTicketsHistory()
+    public List<Passenger> getRacTicketsHistory()
     {
-        return cache.getRacTicketsMap();
+        return cache.getRacTicketsList();
     }
-    public Map<Integer,List<Passenger>> getWaitingTicketsHistory()
+    public List<Passenger> getWaitingTicketsHistory()
     {
-        return cache.getRacTicketsMap();
+        return cache.getWaitingTicketsList();
     }
     private void allocateBirth(Passenger passenger)
     {

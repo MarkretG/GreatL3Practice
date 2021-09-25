@@ -45,11 +45,11 @@ public class RailWayReservation {
                 case 2: {
                     Map<Integer, Map<Integer, Passenger>> confirmedTicks = railwayReservationSystem.getConfirmedTicketsHistory();
                     printConfirmedTickets(confirmedTicks);
-                    Map<Integer, List<Passenger>> racTickets = railwayReservationSystem.getRacTicketsHistory();
+                    List<Passenger> racTickets = railwayReservationSystem.getRacTicketsHistory();
                     if(racTickets.size()>0) {
                         print(racTickets);
                     }
-                    Map<Integer, List<Passenger>> waitingTickets = railwayReservationSystem.getWaitingTicketsHistory();
+                    List<Passenger> waitingTickets = railwayReservationSystem.getWaitingTicketsHistory();
                     if(waitingTickets.size()>0) {
                         print(waitingTickets);
                     }
@@ -77,17 +77,12 @@ public class RailWayReservation {
                 }
             }
         }
-        private static void print(Map<Integer,List<Passenger>> ticket)
+        private static void print(List<Passenger> list)
         {
-            for(Map.Entry<Integer,List<Passenger>> entry:ticket.entrySet())
-            {
-                System.out.println("Ticket id:"+entry.getKey());
-                List<Passenger> list=entry.getValue();
                 for (Passenger passenger:list)
                 {
                     System.out.println(passenger);
                 }
-            }
         }
 
     }

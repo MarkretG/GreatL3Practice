@@ -25,6 +25,51 @@ public class Cache {
     {
         return confirmedTickets;
     }
+    public void addRacTickets(List<Passenger> passenger)
+    {
+      for (Passenger p:passenger)
+      {
+          racTickets.add(p);
+      }
+    }
+    public void addWaitingTickets(List<Passenger> passenger)
+    {
+        for (Passenger p:passenger)
+        {
+            waitingTickets.add(p);
+        }
+    }
+    public List<Passenger> getRacTicketsList()
+    {
+        return racTickets;
+    }
+    public List<Passenger> getWaitingTicketsList()
+    {
+        return waitingTickets;
+    }
+    public void updateConfirmedTicketMap(int ticketId,Map<Integer,Passenger> map)
+    {
+        confirmedTickets.put(ticketId,map);
+    }
+    public void addConfirmedTicketsFromRac(Passenger passenger)
+    {
+        HashMap<Integer,Passenger> innerMap=new HashMap<>();
+        innerMap.put(passenger.getSeatNo(),passenger);
+        confirmedTickets.put(passenger.getTicketId(),innerMap);
+    }
+    public void removePassengerFromRacList()
+    {
+        racTickets.remove(0);
+    }
+    public void  addRacTicketsFromWaiting(Passenger passenger)
+    {
+        racTickets.add(passenger);
+    }
+    public void removePassengerFromWaitingList()
+    {
+        waitingTickets.remove(0);
+    }
+
     /*public void addRacTickets(int ticketId,List<Passenger> passengers)
     {
         racTickets.put(ticketId,passengers);
@@ -41,8 +86,4 @@ public class Cache {
     {
         return waitingTickets;
     }*/
-    public void updateConfirmedTickets()
-    {
-
-    }
 }
