@@ -11,6 +11,7 @@ public class RailWayReservation {
             System.out.println("2.Booked tickets");
             System.out.println("3.Cancel ticket");
             System.out.println("4.Available tickets");
+            System.out.println("5.exit");
             int choice = sc.nextInt();
             switch (choice) {
                 case 1: {
@@ -19,11 +20,11 @@ public class RailWayReservation {
                     int ticketCount = sc.nextInt();
                     for (int i = 0; i < ticketCount; i++) {
                         System.out.println("enter name");
-                        String name = sc.nextLine();
+                        String name = sc.next();
                         System.out.println("enter age");
                         int age = sc.nextInt();
                         System.out.println("enter gender");
-                        String gender = sc.nextLine();
+                        String gender = sc.next();
                         System.out.println("enter berth preference");
                         String berthPreference = sc.next();
                         if (gender.equals("female") && age >= 60) {
@@ -63,8 +64,11 @@ public class RailWayReservation {
                     System.out.println("res");
                 }
                 case 4:
-                    railwayReservationSystem.getListOfAvailableTickets();
+                    List<Integer> list=railwayReservationSystem.getAvailableTickets();
+                    System.out.println(list);
                     break;
+                case 5:
+                    System.exit(0);
 
             }
         }

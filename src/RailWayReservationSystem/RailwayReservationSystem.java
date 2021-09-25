@@ -3,20 +3,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 public class RailwayReservationSystem {
-    int confirmedTicketsCount=63;
-    int racTicketsCount=18;
-    int waitingTicketsCount=10;
-    int seatNo=1;
-    int ticketId=1;
+    static int confirmedTicketsCount=4;
+    static int racTicketsCount=1;
+    static int waitingTicketsCount=1;
+    static int seatNo=1;
+    static int ticketId=1;
     Berth berth=new Berth();
     Cache cache=new Cache();
     RailwayReservationSystem()
     {
-        berth.setLower(18);
-        berth.setUpper(18);
-        berth.setMidUpper(18);
-        berth.setSideLower(9);
-        berth.setSideUpper(9);
+        berth.setLower(1);
+        berth.setUpper(1);
+        berth.setMidUpper(1);
+        berth.setSideLower(1);
+        berth.setSideUpper(1);
     }
     public Passenger getPassengerObject(String name,int age,String gender,String berthPreference)
     {
@@ -98,25 +98,26 @@ public class RailwayReservationSystem {
                 innerMap.remove(seatNo);
                 cache.updateConfirmedTicketMap(ticketId, innerMap);
                 confirmedTicketsCount--;
-                if (racTicketsCount > 0) {
+                List<Passenger> rac = getRacTicketsHistory();
+                List<Passenger> wait = getWaitingTicketsHistory();
+                if (rac.size() > 0) {
                     confirmedTicketsCount++;
-                    List<Passenger> rac = getRacTicketsHistory();
                     Passenger passenger=rac.get(0);
                     passenger.setBerthPreference(berthPreference);
                     passenger.setConfirmationStatus("confirmed");
                     cache.addConfirmedTicketsFromRac(passenger);
                     cache.removePassengerFromRacList();
                     racTicketsCount--;
+                    if (wait.size() > 0) {
+                        racTicketsCount++;
+                        Passenger passenger1=wait.get(0);
+                        passenger1.setConfirmationStatus("Rac");
+                        cache.addRacTicketsFromWaiting(passenger1);
+                        cache.removePassengerFromWaitingList();
+                        waitingTicketsCount--;
+                    }
                 }
-                if (waitingTicketsCount > 0) {
-                    racTicketsCount++;
-                    List<Passenger> wait = getWaitingTicketsHistory();
-                    Passenger passenger=wait.get(0);
-                    passenger.setConfirmationStatus("Rac");
-                    cache.addRacTicketsFromWaiting(passenger);
-                    cache.removePassengerFromWaitingList();
-                    waitingTicketsCount--;
-                }
+
             }
         }
         return "Ticket cancel successfully"+"ticket id"+ticketId+"seat no:"+seatNo;
@@ -171,15 +172,13 @@ public class RailwayReservationSystem {
             }
         }
     }
-    List<Integer> list=new ArrayList<>();
-    public void SetAvailableTickets()
+
+    public List<Integer> getAvailableTickets()
     {
-      list.add(confirmedTicketsCount);
-      list.add(racTicketsCount);
-      list.add(waitingTicketsCount);
-    }
-    public List<Integer> getListOfAvailableTickets()
-    {
+     List<Integer> list=new ArrayList<>();
+       list.add(confirmedTicketsCount);
+       list.add(racTicketsCount);
+       list.add(waitingTicketsCount);
        return list;
     }
 
