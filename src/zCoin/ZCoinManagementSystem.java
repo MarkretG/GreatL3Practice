@@ -227,7 +227,6 @@ public class ZCoinManagementSystem {
                         }
                         break;
                         case 2: zcTransaction(user);break;
-
                     }
                     break;
                 case 4:
