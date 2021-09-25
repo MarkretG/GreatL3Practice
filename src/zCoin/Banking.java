@@ -1,9 +1,6 @@
 package zCoin;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 public class Banking {
     Cache cache=new Cache();
@@ -123,6 +120,10 @@ public class Banking {
     {
         List<User> list=cache.getAllAccountCreationList();
         list.remove(user);
+    }
+    public Map<Long, User> getAccountMap()
+    {
+        return cache.getAccountDetails();
     }
     public User getAccountDetails(User user)
     {

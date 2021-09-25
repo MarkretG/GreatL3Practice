@@ -61,9 +61,7 @@ public class ZCoinManagementSystem {
                                     }
                                 }
                                 if (banking.isCheckApprovalUser(email, password)) {
-
                                     System.out.println("Login success fully");
-
                                 } else {
                                     System.out.println("you are unable to login....your are not in approval list");
                                 }
@@ -150,7 +148,7 @@ public class ZCoinManagementSystem {
         }
     }
 
-    private static void UserManagementPanel(User user) {
+    private static void userManagementPanel(User user) {
         Scanner scanner = new Scanner(System.in);
         boolean end = true;
         while (end) {
