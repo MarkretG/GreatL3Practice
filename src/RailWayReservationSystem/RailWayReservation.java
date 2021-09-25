@@ -2,7 +2,6 @@ package RailWayReservationSystem;
 import java.util.*;
 public class RailWayReservation {
     RailwayReservationSystem railwayReservationSystem = new RailwayReservationSystem();
-
     public static void main(String[] args) {
         RailwayReservationSystem railwayReservationSystem = new RailwayReservationSystem();
         Scanner sc = new Scanner(System.in);
@@ -55,11 +54,17 @@ public class RailWayReservation {
                     }
                 }
                 break;
-                case 3:
+                case 3: {
                     System.out.println("Enter ticket id");
-                    int ticketId=sc.nextInt();
+                    int ticketId = sc.nextInt();
                     System.out.println("enter seat number");
-                    int seatNumber=sc.nextInt();
+                    int seatNumber = sc.nextInt();
+                    String res = railwayReservationSystem.cancelTicket(ticketId, seatNumber);
+                    System.out.println("res");
+                }
+                case 4:
+                    railwayReservationSystem.getListOfAvailableTickets();
+                    break;
 
             }
         }

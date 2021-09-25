@@ -97,24 +97,28 @@ public class RailwayReservationSystem {
                 String berthPreference=entry.getValue().getBerthPreference();
                 innerMap.remove(seatNo);
                 cache.updateConfirmedTicketMap(ticketId, innerMap);
+                confirmedTicketsCount--;
                 if (racTicketsCount > 0) {
+                    confirmedTicketsCount++;
                     List<Passenger> rac = getRacTicketsHistory();
                     Passenger passenger=rac.get(0);
                     passenger.setBerthPreference(berthPreference);
                     passenger.setConfirmationStatus("confirmed");
                     cache.addConfirmedTicketsFromRac(passenger);
                     cache.removePassengerFromRacList();
+                    racTicketsCount--;
                 }
                 if (waitingTicketsCount > 0) {
+                    racTicketsCount++;
                     List<Passenger> wait = getWaitingTicketsHistory();
                     Passenger passenger=wait.get(0);
                     passenger.setConfirmationStatus("Rac");
                     cache.addRacTicketsFromWaiting(passenger);
                     cache.removePassengerFromWaitingList();
+                    waitingTicketsCount--;
                 }
             }
         }
-        confirmedTicketsCount++;
         return "Ticket cancel successfully"+"ticket id"+ticketId+"seat no:"+seatNo;
     }
     public Map<Integer,Map<Integer,Passenger>> getConfirmedTicketsHistory()
@@ -166,6 +170,17 @@ public class RailwayReservationSystem {
                 berth.setSideUpper(berth.getUpper()-1);
             }
         }
+    }
+    List<Integer> list=new ArrayList<>();
+    public void SetAvailableTickets()
+    {
+      list.add(confirmedTicketsCount);
+      list.add(racTicketsCount);
+      list.add(waitingTicketsCount);
+    }
+    public List<Integer> getListOfAvailableTickets()
+    {
+       return list;
     }
 
 }
