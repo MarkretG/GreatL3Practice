@@ -1,0 +1,4 @@
+Mobile     Apple     6s     60000     10
+Mobile     realme     G     120000     5
+Laptop     Hp     Elite     560000     10
+Tablet     Google     chorombook     8000     12
