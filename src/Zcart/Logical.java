@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 public class Logical {
+    long invoiceNo=1000;
     public Customer getCustomerObject(String email,String password,String name,long mobileNo)
     {
         Customer customer=new Customer();
@@ -163,7 +164,7 @@ public class Logical {
         }
         return false;
     }
-    public void addInventoryListToCart(List<Inventory> list) throws ExceptionHandler {
+    public List<Inventory> addInventoryListToCart(List<Inventory> list) throws ExceptionHandler {
         if (list.isEmpty())
         {
             throw new ExceptionHandler("Add cart list is empty");
@@ -185,6 +186,7 @@ public class Logical {
            }
         }
         Cache.OBJ.addCartList(list);
+        return Cache.OBJ.getCartList();
     }
     public String changePassword(String mail,String pass)
     {
@@ -206,14 +208,34 @@ public class Logical {
     }
     public void addInvoiceList(String mail)
     {
-        List<Inventory> list=Cache.OBJ.getCartList();
-        Long invoiceNumber=(long)Math.random();
-        Invoice invoice=new Invoice();
-        invoice.setInvoiceNo(invoiceNumber);
-        invoice.setItems(list);
-        Map<String,Customer> map= Cache.OBJ.getCustomerMap();
-        Customer customer=map.get(mail);
+        double amount=0;
+        Customer customer=Cache.OBJ.getCustomerMap().get(mail);
+        List<Inventory> cartList=Cache.OBJ.getCartList();
         List<Invoice> invoiceList=customer.getInvoiceList();
+        if(invoiceList==null)
+        {
+            invoiceList=new ArrayList<>();
+        }
+        Invoice invoice=new Invoice();
+        List<Inventory> itemList=invoice.getItems();
+        if(itemList==null)
+        {
+            itemList=new ArrayList<>();
+        }
+        for (Inventory inventory:cartList)
+        {
+            itemList.add(inventory);
+            amount+=inventory.getPrice();
+        }
+       invoice.setInvoiceNo(invoiceNo++);
+        invoice.setTotalAmount(amount);
+        invoice.setItems(itemList);
+        invoiceList.add(invoice);
+        Cache.OBJ.setInvoiceMap(mail,invoiceList);
+    }
+    public List<Invoice> getInvoiceList(String mail)
+    {
+        return Cache.OBJ.getInvoiceMap().get(mail);
     }
 
     /*public static void main(String[] args) throws ExceptionHandler {
