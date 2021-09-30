@@ -336,8 +336,7 @@ public class Logical {
         return disCountCode;
 
     }
-
-    /*public static void main(String[] args) throws ExceptionHandler
+   /* public static void main(String[] args) throws ExceptionHandler{
         Logical logical =new Logical();
         List<String> list= logical.readCustomerDetailsFromFile();
         //System.out.println(list);
@@ -346,6 +345,7 @@ public class Logical {
         List<String> list1= logical.readInventoryDetailsFromFile();
         List<Inventory> inventories= logical.initialiseInventoryList(list1);
         System.out.println(inventories);
+        logical.addCustomerIntoFile("");
     }*/
 
 }
