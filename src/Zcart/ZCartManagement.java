@@ -8,16 +8,16 @@ public class ZCartManagement {
     private Logical logical =new Logical();
     public static void main(String[] args){
         ZCartManagement obj=new ZCartManagement();
-        List<Customer> customers=obj.initialiseCustomerList();
-        List<Inventory> inventories=obj.initialiseInventoryList();
-        System.out.println(customers);
-        System.out.println(inventories);
+        obj.initialiseCustomerList();
+        obj.initialiseInventoryList();
+        obj.logical.initialiseAdmin();
         Menu:
         while (true)
         {
-            System.out.println("1.sign up");
+            System.out.println("1.Customer sign up");
             System.out.println("2.login");
-            int choice=obj.sc.nextInt();
+            System.out.println("3.exit");
+            int choice = obj.sc.nextInt();
             switch (choice) {
                 case 1:
                     try {
@@ -26,62 +26,68 @@ public class ZCartManagement {
                         System.out.println(e.getMessage());
                         e.printStackTrace();
                     }
-                    break;
-                case 2:
-                        System.out.println("1.customer login");
-                        System.out.println("2.admin login");
-                        System.out.println("3.exit");
-                        int ch = obj.sc.nextInt();
-                        switch (ch) {
-                            case 1:
-                                String mail = obj.login();
-                                int k = 0;
-                                while (k == 0) {
-                                    System.out.println("1.shopping");
-                                    System.out.println("2.change password");
-                                    System.out.println("3.Invoice history");
-                                    System.out.println("4.ext");
-                                    int option = obj.sc.nextInt();
-                                    if (option == 1) {
-                                        List<Inventory> shoppingList = new ArrayList<>();
-                                        shoppingList.add(obj.shopping());
-                                        boolean end = true;
-                                        while (end) {
-                                            System.out.println("1.do you want to add cart");
-                                            System.out.println("1.check out");
-                                            int c = obj.sc.nextInt();
-                                            if (c == 1) {
-                                                inventories.add(obj.shopping());
-                                            } else if (c == 2) {
-                                                try {
-                                                    List<Inventory> list = obj.logical.addInventoryListToCart(shoppingList);
-                                                    obj.logical.addInvoiceList(mail);
-                                                    System.out.println(list);
-                                                } catch (ExceptionHandler e) {
-                                                    e.printStackTrace();
-                                                }
-                                                end = false;
+                    continue Menu;
+                case 2: {
+                    System.out.println("1.customer login");
+                    System.out.println("2.admin login");
+                    int ch = obj.sc.nextInt();
+                    switch (ch) {
+                        case 1:
+                            String mail = obj.login();
+                            int k = 0;
+                            while (k == 0) {
+                                System.out.println("1.shopping");
+                                System.out.println("2.change password");
+                                System.out.println("3.Invoice history");
+                                System.out.println("4.ext");
+                                int option = obj.sc.nextInt();
+                                if (option == 1) {
+                                    List<Inventory> shoppingList = new ArrayList<>();
+                                    Inventory inventory = obj.shopping();
+                                    shoppingList.add(inventory);
+                                    boolean end = true;
+                                    while (end) {
+                                        System.out.println("1.do you want to add cart");
+                                        System.out.println("1.check out");
+                                        int c = obj.sc.nextInt();
+                                        if (c == 1) {
+                                            shoppingList.add(obj.shopping());
+                                        } else if (c == 2) {
+                                            try {
+                                                List<Inventory> list = obj.logical.addInventoryListToCart(shoppingList);
+                                                obj.logical.addInvoiceList(mail);
+                                                System.out.println(list);
+                                            } catch (ExceptionHandler e) {
+                                                e.printStackTrace();
                                             }
+                                            end = false;
                                         }
-                                    } else if (option == 2) {
-                                        String res = obj.changePassword(mail);
-                                        System.out.println(res);
-                                    } else if (option == 3) {
-                                        List<Invoice> invoiceList = obj.logical.getInvoiceList(mail);
-                                        for (Invoice invoice : invoiceList) {
-                                            System.out.println(invoice);
-                                        }
-                                    } else {
-                                        k++;
-                                        continue Menu;
-
                                     }
+                                } else if (option == 2) {
+                                    String res = obj.changePassword(mail);
+                                    System.out.println(res);
+                                } else if (option == 3) {
+                                    List<Invoice> invoiceList = obj.logical.getInvoiceList(mail);
+                                    for (Invoice invoice : invoiceList) {
+                                        System.out.println(invoice);
+                                    }
+                                } else {
+                                    k++;
+                                    continue Menu;
+
                                 }
-                            case 2:
-
-                        }
-
+                            }
+                            break;
+                        case 2:
+                            obj.adminLogin();
+                            continue Menu;
                     }
+
+                }
+                break;
+                case 3:
+                    System.exit(0);
+            }
         }
     }
     private List<Customer> initialiseCustomerList() {
@@ -122,8 +128,8 @@ public class ZCartManagement {
         System.out.println("enter mobile no");
         long mobileNo = sc.nextLong();
         c += mobileNo+" ";
-        //System.out.println(c);
         Customer customer=logical.getCustomerObject(mail,pass,name,mobileNo);
+        logical.addCustomerIntoFile(c);
         String status = logical.addNewCustomer(customer);
         System.out.println(status);
     }
@@ -167,7 +173,13 @@ public class ZCartManagement {
                 System.out.print(n);
             }
         }
-        return getItem(category);
+        Inventory inventory1=getItem(category);
+        if (inventory1==null)
+        {
+            System.out.println("enter valid category and model");
+            shopping();
+        }
+        return inventory1;
 
     }
     private Inventory getItem(String category)
@@ -184,10 +196,7 @@ public class ZCartManagement {
         {
             return inventory;
         }
-        else {
-            shopping();
-        }
-        return inventory;
+        return null;
 
     }
     private String changePassword(String mail)
@@ -196,6 +205,64 @@ public class ZCartManagement {
         String pass=sc.next();
         pass=logical.encryptPassword(pass);
         return logical.changePassword(mail,pass);
+    }
+    public void adminLogin()
+    {
+        System.out.println("enter admin name");
+        String name=sc.next();
+        System.out.println("enter admin password");
+        String password=sc.next();
+        if(logical.validateAdmin(name,password))
+        {
+            System.out.println("login successfully");
+             int k=0;
+             if(k==0)
+             {
+                 System.out.println("please change your  password");
+                 System.out.println("enter your new password");
+                 String newPassword=sc.next();
+                 newPassword=logical.encryptPassword(newPassword);
+                 String res=logical.adminChangePassword(name,password,newPassword);
+                 System.out.println(res);
+                 k++;
+             }
+             while (k==1) {
+                 System.out.println("1.change password");
+                 System.out.println("2.reorder");
+                 System.out.println("3.exit");
+                 int ch=sc.nextInt();
+                 if(ch==1)
+                 {
+                     System.out.println("enter your new password");
+                     String newPassword=sc.next();
+                     newPassword=logical.encryptPassword(newPassword);
+                     String res=logical.adminChangePassword(name,logical.getAdmin().getAdminPassword(),newPassword);
+                     System.out.println(res);
+                 }
+                 else if(ch==2)
+                 {
+                     System.out.println("reorder stock list <=10");
+                     List<Inventory> list=logical.reOrderStockList();
+                     for (Inventory inventory:list)
+                     {
+                         System.out.println(inventory);
+                         System.out.println("Enter update stock count");
+                         int count=sc.nextInt();
+                         String res=logical.updateCount(inventory,count);
+                         System.out.println(res);
+                     }
+                 }
+                 else if(ch==3)
+                 {
+                     k=0;
+                 }
+             }
+        }
+        else {
+            System.out.println("please enter valid username and password");
+            adminLogin();
+        }
+
     }
 
    /* public void printCustomerMap(Map<String,Customer> customerMap)

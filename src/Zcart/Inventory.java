@@ -51,7 +51,6 @@ public class Inventory {
         return
                 " brand:"+ brand + '\t' +
                  "model:" + model + '\t' +
-                 "price:" + price +'\t'+
-                 "stock:" + stock+'\t';
+                 "price:" + price +'\t';
     }
 }

@@ -28,4 +28,12 @@ public class Invoice {
     public void setItems(List<Inventory> items) {
         this.items = items;
     }
+
+    @Override
+    public String toString() {
+        return
+                "invoiceNo:" + invoiceNo +
+                ", totalAmount=" + totalAmount +
+                ", items=" + items ;
+    }
 }
