@@ -44,12 +44,11 @@ public class Logical {
     }
     public void addCustomerIntoFile(String str) {
           File file=new File("C:\\Users\\inc4\\IdeaProjects\\GreatL3Practice\\src\\Zcart\\user.txt");
-          try (FileWriter fw=new FileWriter(file,true);
-          BufferedWriter bw=new BufferedWriter(fw))
+          try (FileWriter fw=new FileWriter(file,true))
          {
-            bw.write(str);
-            bw.newLine();
-            bw.flush();
+            fw.write(str);
+            fw.write("\n");
+            fw.flush();
         }
         catch (FileNotFoundException e) {
             e.printStackTrace();
