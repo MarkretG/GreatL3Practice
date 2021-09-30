@@ -1,7 +1,6 @@
 package Zcart;
 
 import java.util.List;
-
 public class Customer {
     private String email;
     private String password;
@@ -61,11 +60,10 @@ public class Customer {
 
     @Override
     public String toString() {
-        return "Customer{" +
+        return
                 "email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
-                ", mobile=" + mobile +
-                '}';
+                ", mobile=" + mobile;
     }
 }
