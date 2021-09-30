@@ -8,6 +8,7 @@ public enum Cache {
     private Map<String,Customer> customerMap=new HashMap<>();
     private Map<String,Map<String,List<Inventory>>> inventoryMap=new HashMap<>();
     private List<Inventory> cartList=new ArrayList<>();
+    private Map<String,List<Invoice>> invoiceMap=new HashMap<>();
     public void setCustomerMap(List<Customer> customers) throws ExceptionHandler {
         if(customers.isEmpty())
         {
@@ -39,6 +40,10 @@ public enum Cache {
         }
         customerMap.put(customer.getEmail(),customer);
     }
+    public void setInvoiceMap(String mail,List<Invoice> invoiceList)
+    {
+     invoiceMap.put(mail,invoiceList);
+    }
     public void addCartList(List<Inventory> inventories)
     {
         cartList=inventories;
@@ -54,6 +59,10 @@ public enum Cache {
     public Map<String,Map<String,List<Inventory>>> getInventoryMap()
     {
         return inventoryMap;
+    }
+    public Map<String,List<Invoice>> getInvoiceMap()
+    {
+        return invoiceMap;
     }
 
 }
