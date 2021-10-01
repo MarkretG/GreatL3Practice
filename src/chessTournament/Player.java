@@ -6,7 +6,15 @@ public class Player {
     private float matchPoint;
     private float TotalPoint;
     private List<Match> matchList;
+    private int bonusCount;
 
+    public int getBonusCount() {
+        return bonusCount;
+    }
+
+    public void setBonusCount(int bonusCount) {
+        this.bonusCount = bonusCount;
+    }
 
     public int getPlayerId() {
         return playerId;
@@ -45,5 +53,18 @@ public class Player {
 
     public void setMatchList(List<Match> matchList) {
         this.matchList = matchList;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "playerId=" + playerId +
+                ", playerName='" + playerName + '\'' +
+                ", matchPoint=" + matchPoint +
+                ", TotalPoint=" + TotalPoint +
+                ", matchList=" + matchList +
+                ", bonusCount=" + bonusCount +
+                '}';
     }
 }

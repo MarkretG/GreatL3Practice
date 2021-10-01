@@ -16,4 +16,9 @@ public enum Cache {
     {
         return playerMap;
     }
+
+    public void updatePlayerMap(Map<Integer,Player> playerMap)
+    {
+        this.playerMap=playerMap;
+    }
 }

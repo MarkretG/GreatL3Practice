@@ -33,77 +33,137 @@ public class TournamentDriver {
         return list;
     }
 
+    public Player getWinPlayer(Player player,Player player1,Match match,List<Match> matches)
+    {
+        player.setMatchPoint(1);
+        player.setTotalPoint(player.getTotalPoint()+player.getMatchPoint());
+        match.setResult("won");
+        match.setOpponentName(player1.getPlayerName());
+        match.setOpponentPoint(0);
+        matches.add(match);
+        player.setMatchList(matches);
+        return player;
+    }
+    public Player getLosePlayer(Player player,Player player1,Match match,List<Match> matches)
+    {
+        player.setMatchPoint(0);
+        player.setTotalPoint(player.getTotalPoint()+player.getMatchPoint());
+        match.setOpponentName(player1.getPlayerName());
+        match.setResult("lose");
+        match.setOpponentPoint(1);
+        matches.add(match);
+        player1.setMatchList(matches);
+        return player;
+    }
+    public Player getDrawPlayer(Player player,Player player1,Match match,List<Match> matches)
+    {
+        player.setMatchPoint(0.5f);
+        player.setTotalPoint(player.getTotalPoint()+player.getMatchPoint());
+        match.setResult("draw");
+        match.setOpponentName(player1.getPlayerName());
+        match.setOpponentPoint(0.5f);
+        matches.add(match);
+        player.setMatchList(matches);
+      return player;
+    }
     public List<Map.Entry<Integer,Player>> getResultOfRound(List<Map.Entry<Integer,Player>> list) {
-        for (int i = 0; i < list.size()-1; i+=2) {
-            Player player = list.get(i).getValue();
-            Player player1 = list.get(i + 1).getValue();
+        Map<Integer,Player> map=new LinkedHashMap<>();
+        if(list.size()%2==0){
+            for (int i = 0; i < list.size(); i += 2) {
+                Player player = list.get(i).getValue();
+                Player player1 = list.get(i + 1).getValue();
+                Match match = new Match();
+                Match match1 = new Match();
+                List<Match> matches = player.getMatchList();
+                List<Match> matches1 = player1.getMatchList();
+                if (matches == null) {
+                    matches = new ArrayList<>();
+                }
+                if (matches1 == null) {
+                    matches1 = new ArrayList<>();
+                }
+                int res = (int) Math.floor(Math.random() * 3);
+                if (res == 1) {
+                    player = getWinPlayer(player, player1, match, matches);
+                    player1 = getLosePlayer(player1, player, match1, matches1);
+                    map.put(player.getPlayerId(), player);
+                    map.put(player1.getPlayerId(), player1);
+                } else if (res == 0) {
+                    player = getLosePlayer(player, player1, match, matches);
+                    player1 = getWinPlayer(player1, player, match1, matches1);
+                    map.put(player.getPlayerId(), player);
+                    map.put(player1.getPlayerId(), player1);
+
+                } else {
+                    player = getDrawPlayer(player, player1, match, matches);
+                    player1 = getDrawPlayer(player1, player, match1, matches1);
+                    map.put(player.getPlayerId(), player);
+                    map.put(player1.getPlayerId(), player1);
+
+                }
+            }
+        }
+            if (list.size()%2!=0)
+            {
+                for (int i = 0; i < list.size()-1; i += 2) {
+                    Player player = list.get(i).getValue();
+                    Player player1 = list.get(i + 1).getValue();
+                    Match match = new Match();
+                    Match match1 = new Match();
+                    List<Match> matches = player.getMatchList();
+                    List<Match> matches1 = player1.getMatchList();
+                    if (matches == null) {
+                        matches = new ArrayList<>();
+                    }
+                    if (matches1 == null) {
+                        matches1 = new ArrayList<>();
+                    }
+                    int res = (int) Math.floor(Math.random() * 3);
+                    if (res == 1) {
+                        player = getWinPlayer(player, player1, match, matches);
+                        player1 = getLosePlayer(player1, player, match1, matches1);
+                        map.put(player.getPlayerId(), player);
+                        map.put(player1.getPlayerId(), player1);
+                    } else if (res == 0) {
+                        player = getLosePlayer(player, player1, match, matches);
+                        player1 = getWinPlayer(player1, player, match1, matches1);
+                        map.put(player.getPlayerId(), player);
+                        map.put(player1.getPlayerId(), player1);
+
+                    } else {
+                        player = getDrawPlayer(player, player1, match, matches);
+                        player1 = getDrawPlayer(player1, player, match1, matches1);
+                        map.put(player.getPlayerId(), player);
+                        map.put(player1.getPlayerId(), player1);
+
+                    }
+
+                }
+            }
+        if(list.size()%2!=0)
+        {
             Match match=new Match();
-            Match match1=new Match();
+            Map.Entry<Integer,Player> k=list.remove(list.size()-1);
+            Player player=k.getValue();
             List<Match> matches=player.getMatchList();
-            List<Match> matches1=player1.getMatchList();
             if (matches==null)
             {
                 matches=new ArrayList<>();
             }
-            if(matches1==null)
-            {
-                matches1=new ArrayList<>();
-            }
-            int res=(int) Math.floor(Math.random()*3);
-            if(res==1)
-            {
-                player.setMatchPoint(1);
-                player.setTotalPoint(player.getTotalPoint()+player.getMatchPoint());
-                match.setResult("won");
-                match.setOpponentName(player1.getPlayerName());
-                match.setOpponentPoint(0);
-                matches.add(match);
-                player.setMatchList(matches);
-                player1.setMatchPoint(0);
-                player1.setTotalPoint(player1.getTotalPoint()+player1.getMatchPoint());
-                match1.setOpponentName(player.getPlayerName());
-                match1.setResult("lose");
-                match1.setOpponentPoint(1);
-                matches1.add(match);
-                player1.setMatchList(matches1);
-            }
-            else if (res==0)
-            {
-                player.setMatchPoint(0);
-                player.setTotalPoint(player.getTotalPoint()+player.getMatchPoint());
-                match.setResult("lose");
-                match.setOpponentName(player1.getPlayerName());
-                match.setOpponentPoint(1);
-                matches.add(match);
-                player.setMatchList(matches);
-                player1.setMatchPoint(1);
-                player1.setTotalPoint(player1.getTotalPoint()+player1.getMatchPoint());
-                match1.setOpponentName(player.getPlayerName());
-                match1.setResult("won");
-                match1.setOpponentPoint(0);
-                matches1.add(match);
-                player1.setMatchList(matches1);
-
-            }
-            else
-            {
-                player.setMatchPoint((float)0.5);
-                player.setTotalPoint(player.getTotalPoint()+player.getMatchPoint());
-                match.setResult("draw");
-                match.setOpponentName(player1.getPlayerName());
-                match.setOpponentPoint((float)0.5);
-                matches.add(match);
-                player.setMatchList(matches);
-                player1.setMatchPoint((float)0.5);
-                player1.setTotalPoint(player1.getTotalPoint()+player1.getMatchPoint());
-                match1.setOpponentName(player.getPlayerName());
-                match1.setResult("draw");
-                match1.setOpponentPoint((float)0.5);
-                matches1.add(match);
-                player1.setMatchList(matches1);
-
-            }
+            player.setMatchPoint(1);
+            int count=player.getBonusCount();
+            player.setBonusCount(++count);
+            player.setTotalPoint(player.getTotalPoint()+ player.getMatchPoint());
+            player.setMatchPoint(1);
+            match.setResult("win");
+            match.setOpponentName("bye");
+            matches.add(match);
+            player.setMatchList(matches);
+            map.put(player.getPlayerId(),player);
         }
+        list = new ArrayList<>(map.entrySet());
+        System.out.println(list.size());
+        Cache.OBJ.updatePlayerMap(map);
         return list;
     }
 }

@@ -28,4 +28,14 @@ public class Match {
     public String getOpponentName() {
         return opponentName;
     }
+
+
+    @Override
+    public String toString() {
+        return "Match{" +
+                "result='" + result + '\'' +
+                ", opponentPoint=" + opponentPoint +
+                ", opponentName='" + opponentName + '\'' +
+                '}';
+    }
 }
