@@ -39,7 +39,14 @@ public class ChessTournament {
                     System.out.println("bye");
                 }
             }
-            obj.getResultOfRound(list,playerCount);
+            System.out.println("");
+            List<Map.Entry<Integer,Player>> list1=obj.getResultOfRound(list);
+            for (int j=0;j<list1.size()-1;j+=2)
+            {
+                System.out.print(list1.get(j).getValue().getPlayerName()+"  ");
+                System.out.print("("+list1.get(j).getValue().getMatchPoint()+"  "+list1.get(j+1).getValue().getMatchPoint()+")");
+                System.out.println(list1.get(j+1).getValue().getPlayerName()+"  ");
+            }
         }
 
     }
