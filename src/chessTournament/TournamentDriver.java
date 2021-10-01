@@ -33,51 +33,77 @@ public class TournamentDriver {
         return list;
     }
 
-    public List<Map.Entry<Integer,Player>> getResultOfRound(List<Map.Entry<Integer,Player>> list,int count) {
-        for (int i = 0; i < list.size(); i++) {
+    public List<Map.Entry<Integer,Player>> getResultOfRound(List<Map.Entry<Integer,Player>> list) {
+        for (int i = 0; i < list.size()-1; i+=2) {
             Player player = list.get(i).getValue();
             Player player1 = list.get(i + 1).getValue();
             Match match=new Match();
             Match match1=new Match();
+            List<Match> matches=player.getMatchList();
+            List<Match> matches1=player1.getMatchList();
+            if (matches==null)
+            {
+                matches=new ArrayList<>();
+            }
+            if(matches1==null)
+            {
+                matches1=new ArrayList<>();
+            }
             int res=(int) Math.floor(Math.random()*3);
             if(res==1)
             {
                 player.setMatchPoint(1);
                 player.setTotalPoint(player.getTotalPoint()+player.getMatchPoint());
-                List<Match> matches=player.getMatchList();
-                if (matches==null)
-                {
-                    matches=new ArrayList<>();
-                }
                 match.setResult("won");
                 match.setOpponentName(player1.getPlayerName());
                 match.setOpponentPoint(0);
+                matches.add(match);
+                player.setMatchList(matches);
                 player1.setMatchPoint(0);
                 player1.setTotalPoint(player1.getTotalPoint()+player1.getMatchPoint());
                 match1.setOpponentName(player.getPlayerName());
-                match1.setResult("");
+                match1.setResult("lose");
+                match1.setOpponentPoint(1);
+                matches1.add(match);
+                player1.setMatchList(matches1);
             }
             else if (res==0)
             {
+                player.setMatchPoint(0);
+                player.setTotalPoint(player.getTotalPoint()+player.getMatchPoint());
+                match.setResult("lose");
+                match.setOpponentName(player1.getPlayerName());
+                match.setOpponentPoint(1);
+                matches.add(match);
+                player.setMatchList(matches);
+                player1.setMatchPoint(1);
+                player1.setTotalPoint(player1.getTotalPoint()+player1.getMatchPoint());
+                match1.setOpponentName(player.getPlayerName());
+                match1.setResult("won");
+                match1.setOpponentPoint(0);
+                matches1.add(match);
+                player1.setMatchList(matches1);
 
             }
             else
             {
+                player.setMatchPoint((float)0.5);
+                player.setTotalPoint(player.getTotalPoint()+player.getMatchPoint());
+                match.setResult("draw");
+                match.setOpponentName(player1.getPlayerName());
+                match.setOpponentPoint((float)0.5);
+                matches.add(match);
+                player.setMatchList(matches);
+                player1.setMatchPoint((float)0.5);
+                player1.setTotalPoint(player1.getTotalPoint()+player1.getMatchPoint());
+                match1.setOpponentName(player.getPlayerName());
+                match1.setResult("draw");
+                match1.setOpponentPoint((float)0.5);
+                matches1.add(match);
+                player1.setMatchList(matches1);
 
             }
         }
-              /*Match match=new Match();
-               if (list.size()%2!=0) {
-                for (int j = 0; j < list.size()-1; j +=2){
-                    String status=getMatchStatus();
-                    if(j!=list.size()-1&&status.equals("won"))
-                    {
-                        match.setPoint(1);
-                        match.setPoint(1);
-                        match.setOpponentName(list.get(j).getValue().getPlayerName());
-                    }
-                }
-
-    }*/
+        return list;
     }
 }
