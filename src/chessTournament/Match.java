@@ -1,6 +1,7 @@
 package chessTournament;
 public class Match {
     private String result;
+    private float matchPoint;
     private float opponentPoint;
     private String opponentName;
 
@@ -16,6 +17,13 @@ public class Match {
         this.opponentPoint = opponentPoint;
     }
 
+    public float getMatchPoint() {
+        return matchPoint;
+    }
+
+    public void setMatchPoint(float matchPoint) {
+        this.matchPoint = matchPoint;
+    }
 
     public String getResult() {
         return result;

@@ -8,35 +8,35 @@ public class TournamentDriver {
         }
         Cache.OBJ.setPlayerMap(players);
     }
-    public List<Map.Entry<Integer,Player>> schedule()
-    {
-        Map<Integer,Player> playerMap=Cache.OBJ.getPlayerMap();
-        List<Map.Entry<Integer,Player>> list=new ArrayList<>(playerMap.entrySet());
+    public List<Map.Entry<Integer,Player>> schedule() {
+        Map<Integer, Player> playerMap = Cache.OBJ.getPlayerMap();
+        List<Map.Entry<Integer, Player>> list = new ArrayList<>(playerMap.entrySet());
         Collections.sort(list, new Comparator<Map.Entry<Integer, Player>>() {
             @Override
             public int compare(Map.Entry<Integer, Player> o1, Map.Entry<Integer, Player> o2) {
-                float num1=o1.getValue().getTotalPoint();
-                float num2=o2.getValue().getTotalPoint();
-                if(num1>num2)
-                {
+                float num1 = o1.getValue().getTotalPoint();
+                float num2 = o2.getValue().getTotalPoint();
+                if (num1 > num2) {
                     return -1;
-                }
-                else if(num1<num2)
-                {
+                } else if (num1 < num2) {
                     return 1;
-                }
-                else {
+                } else {
                     return 0;
                 }
             }
         });
         return list;
     }
+    public Player getPlayer(int playerId)
+    {
+      Player player=Cache.OBJ.getPlayerMap().get(playerId);
+      return player;
+    }
 
     public Player getWinPlayer(Player player,Player player1,Match match,List<Match> matches)
     {
-        player.setMatchPoint(1);
-        player.setTotalPoint(player.getTotalPoint()+player.getMatchPoint());
+        match.setMatchPoint(1);
+        player.setTotalPoint(player.getTotalPoint()+match.getMatchPoint());
         match.setResult("won");
         match.setOpponentName(player1.getPlayerName());
         match.setOpponentPoint(0);
@@ -46,8 +46,8 @@ public class TournamentDriver {
     }
     public Player getLosePlayer(Player player,Player player1,Match match,List<Match> matches)
     {
-        player.setMatchPoint(0);
-        player.setTotalPoint(player.getTotalPoint()+player.getMatchPoint());
+        match.setMatchPoint(0);
+        player.setTotalPoint(player.getTotalPoint()+ match.getMatchPoint());
         match.setOpponentName(player1.getPlayerName());
         match.setResult("lose");
         match.setOpponentPoint(1);
@@ -57,8 +57,8 @@ public class TournamentDriver {
     }
     public Player getDrawPlayer(Player player,Player player1,Match match,List<Match> matches)
     {
-        player.setMatchPoint(0.5f);
-        player.setTotalPoint(player.getTotalPoint()+player.getMatchPoint());
+        match.setMatchPoint(0.5f);
+        player.setTotalPoint(player.getTotalPoint()+ match.getMatchPoint());
         match.setResult("draw");
         match.setOpponentName(player1.getPlayerName());
         match.setOpponentPoint(0.5f);
@@ -150,11 +150,11 @@ public class TournamentDriver {
             {
                 matches=new ArrayList<>();
             }
-            player.setMatchPoint(1);
+            match.setMatchPoint(1);
             int count=player.getBonusCount();
             player.setBonusCount(++count);
-            player.setTotalPoint(player.getTotalPoint()+ player.getMatchPoint());
-            player.setMatchPoint(1);
+            player.setTotalPoint(player.getTotalPoint()+  match.getMatchPoint());
+            match. setMatchPoint(1);
             match.setResult("win");
             match.setOpponentName("bye");
             matches.add(match);
@@ -162,7 +162,7 @@ public class TournamentDriver {
             map.put(player.getPlayerId(),player);
         }
         list = new ArrayList<>(map.entrySet());
-        System.out.println(list.size());
+        System.out.println(list);
         Cache.OBJ.updatePlayerMap(map);
         return list;
     }

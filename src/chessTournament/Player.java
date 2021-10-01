@@ -58,13 +58,11 @@ public class Player {
 
     @Override
     public String toString() {
-        return "Player{" +
-                "playerId=" + playerId +
-                ", playerName='" + playerName + '\'' +
-                ", matchPoint=" + matchPoint +
+        return
+                "  playerId:" + playerId +'\t'+
+                "  playerName:" + playerName + '\'' +
                 ", TotalPoint=" + TotalPoint +
-                ", matchList=" + matchList +
-                ", bonusCount=" + bonusCount +
-                '}';
+                ", matchList="  +  matchList +
+                ", bonusCount=" + bonusCount;
     }
 }
