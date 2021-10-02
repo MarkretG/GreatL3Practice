@@ -1,8 +1,5 @@
 package chessTournament;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 public class ChessTournament {
     public static void main(String[] args) throws ExceptionHandler {
         ChessTournament chess = new ChessTournament();
@@ -47,10 +44,8 @@ public class ChessTournament {
 
                         System.out.println("order of the player");
                         list = obj.schedule();
-                        for (int k = 0; k < list.size(); k++) {
-                            String name = list.get(k).getValue().getPlayerName();
-                            System.out.println(name + " " + "(" + list.get(k).getValue().getTotalPoint() + ")");
-                        }
+                        chess.printPointsOrder(list);
+
                     }
                 }
                 break;
@@ -65,56 +60,60 @@ public class ChessTournament {
                 break;
                 case 3:
                 {
-
+                    System.out.println("Rank list of tournament");
+                    List<Map.Entry<Integer,Player>> list= obj.getRankList();
+                    chess.printRankList(list);
                 }
                 break;
                 case 4:
                 {
-
+                 end=false;
+                 break;
                 }
-         }
+            }
 
         }
     }
-        private void scheduleMatch (List < Map.Entry < Integer, Player >> list)
-        {
-            if (list.size() % 2 == 0) {
-                for (int j = 0; j < list.size(); j += 2) {
-                    System.out.print(list.get(j).getValue().getPlayerName() + "  " + "VS" + "  ");
-                    System.out.println(list.get(j + 1).getValue().getPlayerName());
+        private void scheduleMatch (List < Map.Entry < Integer, Player >> list) {
+            for(int i=0;i<list.size();i++) {
+                String player1=list.get(i++).getValue().getPlayerName();
+                String player2=null;
+                if(i<list.size()) {
+                    player2=list.get(i).getValue().getPlayerName();
                 }
-            } else {
-                for (int j = 0; j < list.size(); j += 2) {
-                    if (j != list.size() - 1) {
-                        System.out.print(list.get(j).getValue().getPlayerName() + "  " + "VS" + "  ");
-                        System.out.println(list.get(j + 1).getValue().getPlayerName());
-                        continue;
-                    }
-                    System.out.print(list.get(j).getValue().getPlayerName() + "  " + "VS" + "  ");
-                    System.out.println("bye");
+                else {
+                    player2="Bye";
                 }
+                System.out.println(player1+"  "+"vs"+" "+player2);
             }
         }
-        private void matchResult(List<Map.Entry<Integer,Player>> list)
+        private void matchResult(List<Map.Entry<Integer,Player>> list) {
+            for (int i=0;i<list.size();i++){
+                Player player=list.get(i++).getValue();
+                String player1=player.getPlayerName()+"("+player.getCurrentMatchPoint();
+                String player2=null;
+                if(i<list.size()) {
+                    player2=list.get(i).getValue().getCurrentMatchPoint()+")"+list.get(i).getValue().getPlayerName();
+                }
+                else {
+                    player2=0.0+"bye";
+                }
+                System.out.println(player1+" "+player2);
+            }
+        }
+        private void printPointsOrder(List<Map.Entry<Integer,Player>> list) {
+            for (int k = 0; k < list.size(); k++) {
+                String name = list.get(k).getValue().getPlayerName();
+                float totalPoint=list.get(k).getValue().getTotalPoint();
+                System.out.println(name + " " + "(" + totalPoint+ ")");
+            }
+        }
+        private void printRankList(List<Map.Entry<Integer,Player>> list)
         {
-            if (list.size() % 2 == 0) {
-                for (int j = 0; j < list.size(); j += 2) {
-                    System.out.print(list.get(j).getValue().getPlayerName() + "  ");
-                    System.out.print("(" + list.get(j).getValue().getMatchPoint() + ":" + list.get(j + 1).getValue().getMatchPoint() + ")");
-                    System.out.println(list.get(j + 1).getValue().getPlayerName() + "  ");
-                }
-            } else {
-                for (int j = 0; j < list.size(); j += 2) {
-                    if (j != list.size() - 1) {
-                        System.out.print(list.get(j).getValue().getPlayerName() + "  ");
-                        System.out.print("(" + list.get(j).getValue().getMatchPoint() + ":" + list.get(j + 1).getValue().getMatchPoint() + ")");
-                        System.out.println(list.get(j + 1).getValue().getPlayerName() + "  ");
-                        continue;
-                    }
-                    System.out.print(list.get(j).getValue().getPlayerName() + "  ");
-                    System.out.print("(" + list.get(j).getValue().getMatchPoint() + ":" + 0.0 + ")");
-                    System.out.println("bye");
-                }
+            for (int i=0;i<list.size();i++)
+            {
+                Player player=list.get(i).getValue();
+                System.out.println("RANK: "+(i+1) +player.getPlayerName()+" "+player.getTotalPoint());
             }
         }
 
