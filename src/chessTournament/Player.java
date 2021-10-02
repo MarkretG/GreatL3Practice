@@ -3,7 +3,7 @@ import java.util.List;
 public class Player {
     private int playerId;
     private String playerName;
-    private float matchPoint;
+    private float currentMatchPoint;
     private float TotalPoint;
     private List<Match> matchList;
     private int bonusCount;
@@ -32,13 +32,14 @@ public class Player {
         this.playerName = playerName;
     }
 
-    public float getMatchPoint() {
-        return matchPoint;
+    public float getCurrentMatchPoint() {
+        return currentMatchPoint;
     }
 
-    public void setMatchPoint(float matchPoint) {
-        this.matchPoint = matchPoint;
+    public void setCurrentMatchPoint(float currentMatchPoint) {
+        this.currentMatchPoint = currentMatchPoint;
     }
+
     public float getTotalPoint() {
         return TotalPoint;
     }
