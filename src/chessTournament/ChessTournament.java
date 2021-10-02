@@ -2,7 +2,6 @@ package chessTournament;
 import java.util.*;
 public class ChessTournament {
     public static void main(String[] args) throws ExceptionHandler {
-        ChessTournament chess = new ChessTournament();
         Scanner sc = new Scanner(System.in);
         List<Player> players = new ArrayList<>();
         TournamentDriver obj = new TournamentDriver();
@@ -36,15 +35,18 @@ public class ChessTournament {
                     for (int i = 1; i <= rounds; i++) {
                         System.out.println("Round:" + i);
                         List<Map.Entry<Integer, Player>> list = obj.schedule();
-                        chess.scheduleMatch(list);
+                        String result=obj.getScheduleMatch(list);
+                        System.out.println(result);
 
                         System.out.println("Result for Round:" + i);
                         list = obj.getResultOfRound(list);
-                        chess.matchResult(list);
+                        result=obj.getMatchResult(list);
+                        System.out.println(result);
 
-                        System.out.println("order of the player");
+                        System.out.println("Points of the players");
                         list = obj.schedule();
-                        chess.printPointsOrder(list);
+                        result=obj.getPointsTable(list);
+                        System.out.println(result);
 
                     }
                 }
@@ -61,8 +63,8 @@ public class ChessTournament {
                 case 3:
                 {
                     System.out.println("Rank list of tournament");
-                    List<Map.Entry<Integer,Player>> list= obj.getRankList();
-                    chess.printRankList(list);
+                    String result= obj.getRankList();
+                    System.out.println(result);
                 }
                 break;
                 case 4:
@@ -74,47 +76,4 @@ public class ChessTournament {
 
         }
     }
-        private void scheduleMatch (List < Map.Entry < Integer, Player >> list) {
-            for(int i=0;i<list.size();i++) {
-                String player1=list.get(i++).getValue().getPlayerName();
-                String player2=null;
-                if(i<list.size()) {
-                    player2=list.get(i).getValue().getPlayerName();
-                }
-                else {
-                    player2="Bye";
-                }
-                System.out.println(player1+"  "+"vs"+" "+player2);
-            }
-        }
-        private void matchResult(List<Map.Entry<Integer,Player>> list) {
-            for (int i=0;i<list.size();i++){
-                Player player=list.get(i++).getValue();
-                String player1=player.getPlayerName()+"("+player.getCurrentMatchPoint();
-                String player2=null;
-                if(i<list.size()) {
-                    player2=list.get(i).getValue().getCurrentMatchPoint()+")"+list.get(i).getValue().getPlayerName();
-                }
-                else {
-                    player2=0.0+"bye";
-                }
-                System.out.println(player1+" "+player2);
-            }
-        }
-        private void printPointsOrder(List<Map.Entry<Integer,Player>> list) {
-            for (int k = 0; k < list.size(); k++) {
-                String name = list.get(k).getValue().getPlayerName();
-                float totalPoint=list.get(k).getValue().getTotalPoint();
-                System.out.println(name + " " + "(" + totalPoint+ ")");
-            }
-        }
-        private void printRankList(List<Map.Entry<Integer,Player>> list)
-        {
-            for (int i=0;i<list.size();i++)
-            {
-                Player player=list.get(i).getValue();
-                System.out.println("RANK: "+(i+1) +player.getPlayerName()+" "+player.getTotalPoint());
-            }
-        }
-
 }

@@ -140,7 +140,59 @@ public class TournamentDriver {
        // System.out.println(list);
         return list;
     }
-    public List<Map.Entry<Integer,Player>> getRankList(){
-        return schedule();
+
+    public String getScheduleMatch(List < Map.Entry < Integer, Player >> list) {
+        String result="";
+        for(int i=0;i<list.size();i++) {
+            String player1=list.get(i++).getValue().getPlayerName();
+            String player2=null;
+            if(i<list.size()) {
+                player2=list.get(i).getValue().getPlayerName();
+            }
+            else {
+                player2="Bye";
+            }
+            result+=player1+" "+"vs"+" "+player2+"\n";
+            //System.out.println(player1+"  "+"vs"+" "+player2);
+        }
+        return result;
+    }
+
+    public String getMatchResult(List<Map.Entry<Integer,Player>> list) {
+        String result="";
+        for (int i=0;i<list.size();i++){
+            Player player=list.get(i++).getValue();
+            String player1=player.getPlayerName()+"("+player.getCurrentMatchPoint();
+            String player2=null;
+            if(i<list.size()) {
+                player2=list.get(i).getValue().getCurrentMatchPoint()+")"+list.get(i).getValue().getPlayerName();
+            }
+            else {
+                player2=0.0+"bye";
+            }
+            result+=player1+" "+player2+"\n";//System.out.println(player1+" "+player2);
+        }
+        return result;
+    }
+    public String getPointsTable(List<Map.Entry<Integer,Player>> list) {
+        String result="";
+        for (int k = 0; k < list.size(); k++) {
+            String name = list.get(k).getValue().getPlayerName();
+            float totalPoint=list.get(k).getValue().getTotalPoint();
+            result+=name+" "+"("+totalPoint+")"+"\n";
+            //System.out.println(name + " " + "(" + totalPoint+ ")");
+        }
+        return result;
+    }
+    public String getRankList(){
+        List<Map.Entry<Integer,Player>> list=schedule();
+        String result="";
+        for (int i=0;i<list.size();i++)
+        {
+            Player player=list.get(i).getValue();
+           // System.out.println("RANK: "+(i+1) +player.getPlayerName()+" "+player.getTotalPoint());
+            result+="RANK: "+(i+1) +player.getPlayerName()+" "+player.getTotalPoint()+"\n";
+        }
+        return result;
     }
 }
